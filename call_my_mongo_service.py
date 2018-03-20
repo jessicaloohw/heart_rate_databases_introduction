@@ -5,6 +5,7 @@ import requests
 # (2) Launch Flask app on local machine
 # FLASK_APP=my_mongo_service.py flask run
 
+# USER 1:
 user_data1 = {"user_email": "jessica@gmail.com",
              "user_age": 25,
              "heart_rate": 70}
@@ -28,6 +29,7 @@ time_stamp1 = {"user_email": "jessica@gmail.com",
 r5 = requests.post("http://127.0.0.1:5000/api/heart_rate/interval_average", json=time_stamp1)
 print(r5.json())
 
+# USER 2: Does not exist
 r6 = requests.get("http://127.0.0.1:5000/api/heart_rate/nouser@gmail.com")
 print(r6.json())
 

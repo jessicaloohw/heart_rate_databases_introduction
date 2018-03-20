@@ -58,6 +58,39 @@ def api_heart_rate_average(user_email):
         data = {"message": "User not found."}
         return jsonify(data)
 
+def check_tachycardia(user_age, user_average_heart_rate):
+
+    if(user_age < 3):
+        if(user_average_heart_rate > 151):
+            return True
+        else:
+            return False
+    elif(user_age > 2 and user_age < 5):
+        if(user_average_heart_rate > 137):
+            return True
+        else:
+            return False
+    elif(user_age > 4 and user_age < 8):
+        if(user_average_heart_rate > 133):
+            return True
+        else:
+            return False
+    elif(user_age > 7 and user_age < 12):
+        if(user_average_heart_rate > 130):
+            return True
+        else:
+            return False
+    elif(user_age > 11 and user_age < 16):
+        if(user_average_heart_rate > 119):
+            return True
+        else:
+            return False
+    else:
+        if(user_average_heart_rate > 100):
+            return True
+        else:
+            return False
+
 @app.route("/api/heart_rate/interval_average", methods=["POST"])
 def api_heart_rate_interval_average():
 
@@ -72,6 +105,7 @@ def api_heart_rate_interval_average():
 
     try:
         user = models.User.objects.raw({"_id":user_email}).first()
+        age = user.age
         heart_rate = user.heart_rate
         heart_times = user.heart_rate_times
 
@@ -81,9 +115,12 @@ def api_heart_rate_interval_average():
                 valid_heart_rates.append(heart_rate[n])
         interval_average = np.mean(valid_heart_rates)
 
+        tachycardia = str(check_tachycardia(age, interval_average))
+
         data = {"user_email": user.email,
-                "heart_rate_average_since": time_since,
-                "interval_average": interval_average}
+                "heart_rate_average_since": time_string,
+                "interval_average": interval_average,
+                "tachycardia": tachycardia}
         return jsonify(data)
     except:
         data = {"message": "User not found."}
