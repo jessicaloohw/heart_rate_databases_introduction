@@ -14,17 +14,26 @@ def validate_input_post(input):
         user_email = input["user_email"]
         user_age = input["user_age"]
         user_heart_rate = input["heart_rate"]
+        assert(type(user_email) == str)
+        assert(type(user_age) == int)
+        assert((type(user_heart_rate) == int) or (type(user_heart_rate) == float))
         return user_email, user_age, user_heart_rate
     except KeyError:
+        return None, None, None
+    except AssertionError:
         return None, None, None
 
 def validate_input_interval_average(input):
     try:
         user_email = input["user_email"]
         time_string = input["heart_rate_average_since"]
+        assert(type(user_email) == str)
+        assert(type(time_string) == str)
         time_formatted = datetime.strptime(time_string, "%Y-%m-%d %H:%M:%S.%f")
         return user_email, time_string, time_formatted
     except KeyError:
+        return None, None, None
+    except AssertionError:
         return None, None, None
     except ValueError:
         return None, None, None
