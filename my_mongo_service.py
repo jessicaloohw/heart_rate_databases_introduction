@@ -3,8 +3,10 @@ from main import add_heart_rate, create_user
 from pymodm import connect, errors
 from datetime import datetime
 import models
+import numpy as np
 
 app = Flask(__name__)
+connect("mongodb://vcm-3486.vm.duke.edu:27017/heart_rate_app")
 
 def validate_input_post(input):
 
@@ -63,8 +65,6 @@ def check_tachycardia(user_age, user_average_heart_rate):
 @app.route("/api/heart_rate", methods=["POST"])
 def api_heart_rate_post():
 
-    connect("mongodb://vcm-3486.vm.duke.edu:27017/heart_rate_app")
-
     input = request.get_json()
     user_email, user_age, user_heart_rate = validate_input_post(input)
     if(user_email is None):
@@ -84,8 +84,6 @@ def api_heart_rate_post():
 @app.route("/api/heart_rate/<user_email>", methods=["GET"])
 def api_heart_rate_get(user_email):
 
-    connect("mongodb://vcm-3486.vm.duke.edu:27017/heart_rate_app")
-
     try:
         user = models.User.objects.raw({"_id":user_email}).first()
         data = {"user_email": user.email,
@@ -97,10 +95,6 @@ def api_heart_rate_get(user_email):
 
 @app.route("/api/heart_rate/average/<user_email>", methods=["GET"])
 def api_heart_rate_average(user_email):
-
-    import numpy as np
-
-    connect("mongodb://vcm-3486.vm.duke.edu:27017/heart_rate_app")
 
     try:
         user = models.User.objects.raw({"_id":user_email}).first()
@@ -115,10 +109,6 @@ def api_heart_rate_average(user_email):
 
 @app.route("/api/heart_rate/interval_average", methods=["POST"])
 def api_heart_rate_interval_average():
-
-    import numpy as np
-
-    connect("mongodb://vcm-3486.vm.duke.edu:27017/heart_rate_app")
 
     input = request.get_json()
     user_email, time_string, time_formatted = validate_input_interval_average(input)
