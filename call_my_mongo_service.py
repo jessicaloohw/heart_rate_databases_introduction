@@ -40,3 +40,15 @@ time_stamp2 = {"user_email": "nouser@gmail.com",
                "heart_rate_average_since": "2018-03-01 00:00:00.000000"}
 r8 = requests.post("http://127.0.0.1:5000/api/heart_rate/interval_average", json=time_stamp2)
 print(r8.json())
+
+# USER 3: Wrong inputs
+user_data3 = {"email": "wronginput@gmail.com",
+              "age": 50,
+              "heart_rate": 1000}
+r9 = requests.post("http://127.0.0.1:5000/api/heart_rate", json=user_data3)
+print(r9.json())
+
+time_stamp3 = {"user_email": "wronginput@gmail.com",
+               "heart_rate_average_since": "18-01-01 00:00:00.000000"}
+r10 = requests.post("http://127.0.0.1:5000/api/heart_rate/interval_average", json=time_stamp3)
+print(r10.json())
