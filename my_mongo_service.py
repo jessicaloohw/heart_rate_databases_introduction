@@ -78,17 +78,17 @@ def api_heart_rate_post():
     user_email, user_age, user_heart_rate = validate_input_post(input)
     if(user_email is None):
         data = {"message": "Wrong inputs."}
-        return jsonify(data)
+        return jsonify(data), 400
 
     try:
         user = models.User.objects.raw({"_id":user_email}).first()
         add_heart_rate(email=user_email, heart_rate=user_heart_rate, time=datetime.now())
         data = {"message": "Heart rate added to user."}
-        return jsonify(data)
+        return jsonify(data), 200
     except errors.DoesNotExist:
         create_user(email=user_email, age=user_age, heart_rate=user_heart_rate)
         data = {"message": "New user created."}
-        return jsonify(data)
+        return jsonify(data), 200
 
 @app.route("/api/heart_rate/<user_email>", methods=["GET"])
 def api_heart_rate_get(user_email):
@@ -97,10 +97,10 @@ def api_heart_rate_get(user_email):
         user = models.User.objects.raw({"_id":user_email}).first()
         data = {"user_email": user.email,
                 "heart_rate": user.heart_rate}
-        return jsonify(data)
+        return jsonify(data), 200
     except errors.DoesNotExist:
         data = {"message": "User not found."}
-        return jsonify(data)
+        return jsonify(data), 400
 
 @app.route("/api/heart_rate/average/<user_email>", methods=["GET"])
 def api_heart_rate_average(user_email):
@@ -111,10 +111,10 @@ def api_heart_rate_average(user_email):
         average_heart_rate = np.mean(heart_rate)
         data = {"user_email": user.email,
                 "average_heart_rate": average_heart_rate}
-        return jsonify(data)
+        return jsonify(data), 200
     except errors.DoesNotExist:
         data = {"message": "User not found."}
-        return jsonify(data)
+        return jsonify(data), 400
 
 @app.route("/api/heart_rate/interval_average", methods=["POST"])
 def api_heart_rate_interval_average():
@@ -123,7 +123,7 @@ def api_heart_rate_interval_average():
     user_email, time_string, time_formatted = validate_input_interval_average(input)
     if(user_email is None):
         data = {"message": "Wrong inputs."}
-        return jsonify(data)
+        return jsonify(data), 400
 
     try:
         user = models.User.objects.raw({"_id":user_email}).first()
@@ -143,7 +143,7 @@ def api_heart_rate_interval_average():
                 "heart_rate_average_since": time_string,
                 "interval_average": interval_average,
                 "tachycardia": tachycardia}
-        return jsonify(data)
+        return jsonify(data), 200
     except errors.DoesNotExist:
         data = {"message": "User not found."}
-        return jsonify(data)
+        return jsonify(data), 400
