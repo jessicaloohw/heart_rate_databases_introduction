@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from main import add_heart_rate, create_user
 from pymodm import connect, errors
 from datetime import datetime
@@ -6,6 +7,7 @@ import models
 import numpy as np
 
 app = Flask(__name__)
+CORS(app)
 connect("mongodb://vcm-3486.vm.duke.edu:27017/heart_rate_app")
 
 def validate_input_post(input):

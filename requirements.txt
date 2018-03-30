@@ -4,3 +4,4 @@ numpy
 requests
 pytest
 gunicorn
+flask-cors
