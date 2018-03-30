@@ -98,7 +98,8 @@ def api_heart_rate_get(user_email):
     try:
         user = models.User.objects.raw({"_id":user_email}).first()
         data = {"user_email": user.email,
-                "heart_rate": user.heart_rate}
+                "heart_rate": user.heart_rate,
+                "times": user.heart_rate_times}
         return jsonify(data), 200
     except errors.DoesNotExist:
         data = {"message": "User not found."}
