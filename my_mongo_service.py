@@ -147,3 +147,13 @@ def api_heart_rate_interval_average():
     except errors.DoesNotExist:
         data = {"message": "User not found."}
         return jsonify(data), 400
+
+@app.route("/api/heart_rate/all_users", methods=["GET"])
+def api_heart_rate_all_users():
+
+    all_users = []
+    for user in models.User.objects.all():
+        all_users.append(user.email)
+
+    data = {"all_users": all_users}
+    return jsonify(data), 200
